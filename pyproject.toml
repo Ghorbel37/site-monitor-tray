@@ -1,0 +1,28 @@
+[project]
+name = "site-notifier"
+version = "1.0.0"
+description = "Windows system-tray app that monitors a URL and notifies on up/down transitions"
+requires-python = ">=3.11"
+dependencies = [
+    "certifi==2026.2.25",
+    "charset-normalizer==3.4.5",
+    "idna==3.11",
+    "pillow==12.1.1",
+    "pystray==0.19.5",
+    "requests==2.32.5",
+    "six==1.17.0",
+    "urllib3==2.6.3",
+]
+
+[project.scripts]
+site-notifier = "site_notifier:main"
+
+[dependency-groups]
+dev = [
+    "pyinstaller>=6.19.0",
+]
+
+[tool.uv]
+dev-dependencies = [
+    "pyinstaller>=6.19.0",
+]
