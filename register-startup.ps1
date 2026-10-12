@@ -1,5 +1,21 @@
-$exePath  = Resolve-Path -Path (Join-Path $PSScriptRoot "dist\site_notifier.exe")
-$arguments = '--url https://localhost:8443 --name "Local server" --interval 5'
+# Registers a "SiteNotifier" task that starts the tray app at every logon.
+# Run once in an elevated PowerShell. Sites are read from the config file
+# (sites.toml next to the exe, else %APPDATA%\SiteMonitorTray\sites.toml).
+param(
+    [string]$ExePath,
+    [string]$ConfigPath
+)
+
+if (-not $ExePath) {
+    $candidates = @(
+        (Join-Path $PSScriptRoot "site_notifier.exe"),
+        (Join-Path $PSScriptRoot "dist\site_notifier.exe")
+    )
+    $ExePath = $candidates | Where-Object { Test-Path $_ } | Select-Object -First 1
+    if (-not $ExePath) { throw "site_notifier.exe not found next to this script or in dist\. Pass -ExePath." }
+}
+$exePath   = (Resolve-Path $ExePath).Path
+$arguments = if ($ConfigPath) { "--config `"$((Resolve-Path $ConfigPath).Path)`"" } else { "" }
 $taskName  = "SiteNotifier"
 
 # Use cmd /c start so Task Scheduler spawns the exe detached and exits immediately.
