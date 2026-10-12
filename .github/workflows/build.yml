@@ -1,0 +1,65 @@
+name: Build
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt pyinstaller==6.19.0
+
+      - name: Check the example config and the startup scripts
+        shell: pwsh
+        run: |
+          python -c "import site_notifier as s; print(s.load_config('sites.example.toml'))"
+          foreach ($f in Get-ChildItem *.ps1) {
+            $errors = $null
+            [System.Management.Automation.Language.Parser]::ParseFile($f.FullName, [ref]$null, [ref]$errors) | Out-Null
+            if ($errors) { $errors; exit 1 }
+          }
+
+      - name: Build site_notifier.exe
+        run: >
+          pyinstaller --onefile --noconsole --clean
+          --hidden-import pystray._win32
+          --icon assets/app.ico
+          --name site_notifier
+          site_notifier.py
+
+      - name: Package
+        shell: pwsh
+        run: |
+          $version = (python -c "import tomllib; print(tomllib.load(open('pyproject.toml','rb'))['project']['version'])")
+          New-Item -ItemType Directory pkg | Out-Null
+          Copy-Item dist/site_notifier.exe, sites.example.toml, register-startup.ps1, register-startup-restart.ps1, README.md, LICENSE pkg/
+          Compress-Archive pkg/* "site-monitor-tray-$version-win64.zip"
+          "ZIP=site-monitor-tray-$version-win64.zip" >> $env:GITHUB_ENV
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: site-monitor-tray
+          path: ${{ env.ZIP }}
+
+      - name: Attach to the GitHub release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ env.ZIP }}
+          generate_release_notes: true

@@ -6,7 +6,7 @@ pillow==12.1.1
 pystray==0.19.5
 requests==2.32.5
 six==1.17.0
+urllib3==2.6.3
 
 # Build tool (not needed at runtime)
 # pyinstaller==6.19.0
-urllib3==2.6.3

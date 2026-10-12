@@ -1,8 +1,9 @@
 [project]
-name = "site-notifier"
-version = "1.0.0"
-description = "Windows system-tray app that monitors a URL and notifies on up/down transitions"
+name = "site-monitor-tray"
+version = "1.1.0"
+description = "Windows system-tray app that watches websites and notifies on up/down changes"
 requires-python = ">=3.11"
+license = "MIT"
 dependencies = [
     "certifi==2026.2.25",
     "charset-normalizer==3.4.5",
@@ -19,10 +20,5 @@ site-notifier = "site_notifier:main"
 
 [dependency-groups]
 dev = [
-    "pyinstaller>=6.19.0",
-]
-
-[tool.uv]
-dev-dependencies = [
-    "pyinstaller>=6.19.0",
+    "pyinstaller==6.19.0",
 ]
