@@ -14,3 +14,6 @@ dist/
 # OS
 .DS_Store
 Thumbs.db
+
+# Personal config (the template is sites.example.toml)
+/sites.toml

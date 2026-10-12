@@ -1,0 +1,18 @@
+# Site Monitor Tray configuration.
+# Edit this file, then choose "Reload config" in the tray menu.
+
+[defaults]
+interval = 30        # seconds between checks
+timeout = 5          # seconds before a request counts as failed
+verify_tls = true    # false accepts self-signed certificates
+
+[[site]]
+name = "Example"
+url = "https://example.com"
+
+# [[site]]
+# name = "Local server"
+# url = "https://localhost:8443"
+# interval = 5
+# verify_tls = false        # local server with a self-signed certificate
+# expect_status = [200]     # only these HTTP codes count as UP
