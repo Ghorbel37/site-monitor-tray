@@ -2,6 +2,7 @@
 
 import argparse
 import os
+import subprocess
 import sys
 import threading
 import time
@@ -348,6 +349,7 @@ class TrayApp:
         items += [
             pystray.MenuItem("Check now", self._check_now, default=True),
             pystray.MenuItem("Open config", self._open_config, visible=self.cli_sites is None),
+            pystray.MenuItem("Show config in folder", self._show_config, visible=self.cli_sites is None),
             pystray.MenuItem("Reload config", self._reload, visible=self.cli_sites is None),
             pystray.Menu.SEPARATOR,
             pystray.MenuItem(f"Site Monitor {__version__}", None, enabled=False),
@@ -364,11 +366,19 @@ class TrayApp:
             self.monitor.check_now()
 
     def _open_config(self, icon, item):
-        path = str(self.config_path)
-        if hasattr(os, "startfile"):
-            os.startfile(path)
+        # .toml has no default app on Windows, so open it in Notepad
+        path = str(Path(self.config_path).resolve())
+        if sys.platform == "win32":
+            subprocess.Popen(["notepad.exe", path])
         else:
             webbrowser.open(Path(path).as_uri())
+
+    def _show_config(self, icon, item):
+        path = Path(self.config_path).resolve()
+        if sys.platform == "win32":
+            subprocess.Popen(["explorer.exe", f"/select,{path}"])
+        else:
+            webbrowser.open(path.parent.as_uri())
 
     def _reload(self, icon, item):
         self.load()

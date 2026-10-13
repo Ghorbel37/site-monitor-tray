@@ -12,7 +12,7 @@ A lightweight Windows system-tray app that watches one or more websites and noti
 - One tray icon for all of them: green when everything is up, amber when some are down, red when all are down
 - Tray menu lists every site with its last result (`HTTP 200`, `connection failed`, `TLS certificate error`...); click a site to open it in the browser
 - Windows notification on every UP and DOWN change
-- **Check now**, **Open config** and **Reload config** from the menu, no restart needed
+- **Check now**, **Open config** (opens it in Notepad), **Show config in folder** and **Reload config** from the menu, no restart needed
 - TLS certificates are verified by default; turn it off per site for local servers with self-signed certificates
 - Runs silently in the background (no console window)
 
