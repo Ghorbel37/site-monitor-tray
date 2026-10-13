@@ -16,7 +16,7 @@ import urllib3
 from PIL import Image, ImageDraw
 import pystray
 
-__version__ = "1.1.0"
+__version__ = "1.2.0"
 
 APP_NAME = "Site Monitor"
 CONFIG_NAME = "sites.toml"
