@@ -4,7 +4,7 @@
 
 A lightweight Windows system-tray app that watches one or more websites and notifies you when one goes down or comes back.
 
-![Tray icon states](docs/tray-states.png)
+<p align="center"><img src="docs/tray-states.png" alt="Tray icon states: all up, some down, all down, checking"></p>
 
 ## Features
 
