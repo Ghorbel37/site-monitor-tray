@@ -62,11 +62,14 @@ Any key can go in `[defaults]` and be overridden per site. After editing, choose
 Requires Python 3.11+.
 
 ```bash
-uv pip install -r requirements.txt
-uv run site_notifier.py                          # uses sites.toml as described above
-uv run site_notifier.py --config C:\path\to\sites.toml
-uv run site_notifier.py --url https://example.com --name "Example" --interval 10
-uv run site_notifier.py --once                   # check every site once, print, exit
+python -m venv .venv
+.venv\Scripts\activate
+pip install -r requirements.txt
+
+python site_notifier.py                          # uses sites.toml as described above
+python site_notifier.py --config C:\path\to\sites.toml
+python site_notifier.py --url https://example.com --name "Example" --interval 10
+python site_notifier.py --once                   # check every site once, print, exit
 ```
 
 | Argument | Description |
@@ -82,8 +85,8 @@ uv run site_notifier.py --once                   # check every site once, print,
 ## Build the exe yourself
 
 ```bash
-uv pip install pyinstaller==6.19.0
-uv run pyinstaller --onefile --noconsole --hidden-import pystray._win32 --icon assets/app.ico --name site_notifier site_notifier.py
+pip install pyinstaller==6.19.0              # inside the .venv from above
+pyinstaller --onefile --noconsole --hidden-import pystray._win32 --icon assets/app.ico --name site_notifier site_notifier.py
 ```
 
 Output: `dist/site_notifier.exe`. The [Build workflow](.github/workflows/build.yml) does the same on every push and attaches the zip to the release when a `v*` tag is pushed.
